@@ -29,8 +29,8 @@ public class FakeStoreProductService implements IProductService {
     private FakeStoreApiClient fakeStoreApiClient;
 
     @Override
-    public Product getProductById(Long productId) {
-        FakeStoreProductDto fakeStoreProductDto = fakeStoreApiClient.getProductById(productId);
+    public Product getProductById(Long id) {
+        FakeStoreProductDto fakeStoreProductDto = fakeStoreApiClient.getProductById(id);
         if(fakeStoreProductDto != null){
             return from(fakeStoreProductDto);
         }
