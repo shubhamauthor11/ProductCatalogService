@@ -1,0 +1,28 @@
+Types of inheritance
+1. single table
+2. table for each class / table per class
+3. foreign key/joined class
+4. mapped superclass
+
+Fetch Type
+1. Lazy
+2. Eager
+
+Fetch Type Mode
+1. Select
+2. Join
+3. Subselect
+
+Steps to write any test method
+1. Arrange
+2. Act
+3. Assert
+
+* try to have naming convention like "test_when_then" for unit tests
+
+* when there is a client facing classes or controller then we create WebMVCTest
+
+
+ Created Models and Product Controller, GetProductById functionality using FakeStore, Exception Handling, GetProducts and ReplaceProduct, Client layer and exception handlers, connecting to db, tables inheritance examples, jpa queries and query methods, FetchTypes and FetchModes , unit tests with mock mvc test and assert in json
+
+Db Schemas Generation

@@ -6,6 +6,7 @@ import com.shubham.productcatalogservice.models.Category;
 import com.shubham.productcatalogservice.models.Product;
 import com.shubham.productcatalogservice.services.IProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
@@ -20,12 +21,19 @@ import java.util.Objects;
 @RequestMapping("/products")
 public class ProductController {
 
-    @Autowired
-    private IProductService productService;
+    //For Displaying use of Qualifier
+//    @Qualifier("fkps")
+//    @Autowired
+//    private IProductService productService1;
 
+//    @Qualifier("sps") // this will not work when we use @primary
+    @Autowired
+    private IProductService productService2;
+
+    @GetMapping
     public List<ProductDto> getAllProducts(){
         List<ProductDto> productDtos = new ArrayList<>();
-        List<Product> products = productService.getAllProducts();
+        List<Product> products = productService2.getAllProducts();
         for (Product product : products){
             productDtos.add(from(product));
         }
@@ -41,8 +49,10 @@ public class ProductController {
                 headers.add("calledBy", "wrongperson");
                 throw new IllegalArgumentException("Please try with productId > 0");
 //                return new ResponseEntity<>(null, headers, HttpStatus.NOT_FOUND);
+            }else if(productId == 0){
+                throw new IllegalArgumentException("No No !!");
             }
-            Product product = productService.getProductById(productId);
+            Product product = productService2.getProductById(productId);
             headers.add("calledBy", "intelligent");
             if(product == null)
                 return new ResponseEntity<>(null, headers, HttpStatus.BAD_REQUEST);
@@ -70,15 +80,17 @@ public class ProductController {
     }
 
     @PostMapping
-    public ProductDto createProduct(@RequestBody Product product){
-        return null;
+    public ProductDto createProduct(@RequestBody ProductDto productDto){
+        Product input = from(productDto);
+        Product output = productService2.save(input);
+        return from(output);
     }
 
     @PutMapping("/{id}")
     public ProductDto replaceProduct(@PathVariable Long id, @RequestBody ProductDto request){
 
         Product productRequest = from(request);
-        Product product = productService.replaceProduct(id, productRequest);
+        Product product = productService2.replaceProduct(id, productRequest);
         return from(product);
     }
 
@@ -91,6 +103,7 @@ public class ProductController {
         product.setImageUrl(productDto.getImageUrl());
         if(!Objects.isNull(product.getCategory())){
             Category category = new Category();
+            category.setId(productDto.getCategory().getId());
             category.setName(productDto.getCategory().getName());
             product.setCategory(category);
         }

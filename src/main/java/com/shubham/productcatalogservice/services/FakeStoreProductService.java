@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-@Service
+@Service("fkps")
 public class FakeStoreProductService implements IProductService {
 
     @Autowired
@@ -29,8 +29,8 @@ public class FakeStoreProductService implements IProductService {
     private FakeStoreApiClient fakeStoreApiClient;
 
     @Override
-    public Product getProductById(Long id) {
-        FakeStoreProductDto fakeStoreProductDto = fakeStoreApiClient.getProductById(id);
+    public Product getProductById(Long productId) {
+        FakeStoreProductDto fakeStoreProductDto = fakeStoreApiClient.getProductById(productId);
         if(fakeStoreProductDto != null){
             return from(fakeStoreProductDto);
         }
@@ -58,6 +58,11 @@ public class FakeStoreProductService implements IProductService {
                 requestForEntity("http://fakestoreapi.com/products/{productId}", HttpMethod.PUT, fakeStoreProductDtoRequest,
                         FakeStoreProductDto.class, productId).getBody();
         return from(response);
+    }
+
+    @Override
+    public Product save(Product product) {
+        return null;
     }
 
     private <T> ResponseEntity<T> requestForEntity(String url, HttpMethod httpMethod, @Nullable Object request, Class<T>
